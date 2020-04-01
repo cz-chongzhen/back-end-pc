@@ -1,17 +1,17 @@
-package cn.cz.czbase;
+package cn.cz.czauth;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableEurekaClient
 @SpringBootApplication
-@MapperScan("cn.cz.czbase.dao")
-public class CzBaseApplication {
+@EnableEurekaClient
+@EnableFeignClients
+public class CzAuthApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CzBaseApplication.class, args);
+        SpringApplication.run(CzAuthApplication.class, args);
     }
 
 }

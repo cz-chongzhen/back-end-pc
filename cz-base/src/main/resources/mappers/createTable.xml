@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cz.czbase.dao.CreateTableDao">
+    <update id="createTable" parameterType="cn.cz.czbase.entity.TableEntity">
+        CREATE TABLE ${tableName}
+        <foreach collection="columns" open="(" close=")" item="column" separator=",">
+            ${column.name} ${column.typeName}(#{column.length}) ${column.isNull} DEFAULT NULL
+        </foreach>
+        ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+    </update>
+    <select id="getFieldType" resultType="java.util.HashMap">
+
+    </select>
+</mapper>

@@ -8,9 +8,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>cn.cz</groupId>
-    <artifactId>cz-base</artifactId>
+    <artifactId>cz-auth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cz-base</name>
+    <name>cz-auth</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -19,6 +19,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -27,6 +28,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
         <!--添加mysql驱动依赖-->
         <dependency>
             <groupId>mysql</groupId>
@@ -44,16 +50,22 @@
             <version>2.1.1</version>
         </dependency>
 
-        <!-- redis客户端:Jedis -->
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>1.4.7.RELEASE</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.7.0</version>
         </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-        </dependency>
+
+
+
+
+
+
+
+
+
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,7 +79,6 @@
             </exclusions>
         </dependency>
     </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <dependency>

@@ -1,0 +1,10 @@
+package cn.cz.czbase.dao;
+
+import cn.cz.czbase.entity.User;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserDAO {
+    User findUser(User user);
+}
+
