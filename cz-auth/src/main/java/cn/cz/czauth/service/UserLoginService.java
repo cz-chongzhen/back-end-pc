@@ -17,4 +17,8 @@ public interface UserLoginService {
     @RequestMapping(value = "/verifyAccessToken/{access_token}",method = RequestMethod.POST)
     boolean vertifyAccessToken(@PathVariable("access_token") String access_token,@RequestBody User user);
 
+    @RequestMapping(value = "/user/registerUser")
+    User regist(@RequestBody User user);
+
+
 }

@@ -1,17 +1,14 @@
 package cn.cz.czauth.controller;
 
-import cn.cz.czauth.config.CheckToken;
 import cn.cz.czauth.config.LoginToken;
-import cn.cz.czauth.dto.UserSession;
 import cn.cz.czauth.entity.AppResponse;
 import cn.cz.czauth.entity.User;
 import cn.cz.czauth.service.JWTVertiftService;
 import cn.cz.czauth.service.UserLoginService;
+import cn.cz.czauth.service.UserService;
 import cn.cz.czauth.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,13 +24,14 @@ public class UserLogin {
     private UserLoginService userLoginService;
     @Autowired
     private JWTVertiftService jwtVertiftService;
-
+    @Autowired
+    private UserService userService;
     /**
      * 用户登陆方法
      * @param loginUser  传入用户名和密码
      * @return
      */
-    @RequestMapping(value = "/login/{userName}")
+    @RequestMapping(value = "/login")
     @LoginToken
     public AppResponse userLogin(@RequestBody User loginUser){
         AppResponse appResponse = new AppResponse();
@@ -65,24 +63,10 @@ public class UserLogin {
         return appResponse;
     }
 
-
-
-
-    @RequestMapping(value = "/vertifyAccess_Token/{access_token}")
-    public boolean vertifyAccessToken(@PathVariable(value = "access_token") String access_token){
-        return jwtVertiftService.vertifyAccessToken(access_token);
+    @RequestMapping(value = "/register")
+    @LoginToken
+    public AppResponse registerUser(@RequestBody User user){
+        return userService.registerUser(user);
     }
 
-
-    @CheckToken
-    @RequestMapping(value = "/testJWT/{access_token}")
-    public AppResponse testJWT(@PathVariable("access_token") String access_token){
-        User user = new User();
-        Claims claims = JwtUtil.parseJWT(access_token);
-        //获取登陆用户的id
-        long userId = (Long)claims.get("id");
-        AppResponse appResponse = new AppResponse();
-        appResponse.setAppData(claims);
-        return appResponse;
-    }
 }

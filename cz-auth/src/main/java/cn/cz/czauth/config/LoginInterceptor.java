@@ -1,5 +1,6 @@
 package cn.cz.czauth.config;
 
+import cn.cz.czauth.dto.UserSession;
 import cn.cz.czauth.entity.User;
 import cn.cz.czauth.service.UserLoginService;
 import cn.cz.czauth.util.JwtUtil;
@@ -33,6 +34,16 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
+        //有token的话往UserSession中写入userId  和userName
+        if(token!=null && token.trim().length()>0){
+            try{
+                Claims claims = JwtUtil.parseJWT(token);
+                UserSession.setProperty("userId",claims.get("id"));
+                UserSession.setProperty("userName",claims.get("userName"));
+            }catch (Exception e){
+                throw new RuntimeException("解析JWT异常！");
+            }
+        }
         //检查有没有需要用户权限的注解
         if (method.isAnnotationPresent(CheckToken.class)) {
             CheckToken checkToken = method.getAnnotation(CheckToken.class);
@@ -47,7 +58,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                     Claims claims = JwtUtil.parseJWT(token);
                     userId = (Long)claims.get("id");
                 } catch (Exception j) {
-                    throw new RuntimeException("访问异常！");
+                    throw new RuntimeException("解析JWT异常！");
                 }
                 User paramUser = new User();
                 paramUser.setId(userId);

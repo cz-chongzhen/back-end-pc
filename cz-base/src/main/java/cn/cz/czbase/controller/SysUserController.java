@@ -14,8 +14,13 @@ public class SysUserController {
     private UserService userService;
     @RequestMapping("/findUser")
     public User findUser(@RequestBody User user){
-        User user1 = new User();
-        user1 = userService.findUser(user);
+        User user1 = userService.findUser(user);
         return user1;
+    }
+
+    @RequestMapping("/registerUser")
+    public User register(@RequestBody User user){
+        userService.registerUser(user);
+        return user;
     }
 }

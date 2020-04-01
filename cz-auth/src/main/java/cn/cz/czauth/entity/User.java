@@ -8,5 +8,7 @@ public class User {
     private String userName;
     private String passWord;
     private String createDateTime;
-    private int sex;
+    private String remark;
+    private String mobile;
+    private long creator;
 }

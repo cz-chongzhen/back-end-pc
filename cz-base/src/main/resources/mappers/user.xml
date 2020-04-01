@@ -18,4 +18,8 @@
             </if>
         </where>
     </select>
+    <insert id="registerUser" parameterType="cn.cz.czbase.entity.User">
+        insert into user(id,userName,passWord,createDateTime,mobile,remark,creator)
+        values(#{id},#{userName},#{passWord},#{createDateTime},#{mobile},#{remark},#{creator})
+    </insert>
 </mapper>

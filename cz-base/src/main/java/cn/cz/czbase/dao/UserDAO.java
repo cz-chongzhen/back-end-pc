@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDAO {
     User findUser(User user);
+
+    int registerUser(User user);
 }
 
