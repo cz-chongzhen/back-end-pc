@@ -2,14 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.cz.czbase.dao.CreateTableDao">
-    <update id="createTable" parameterType="cn.cz.czbase.entity.TableEntity">
+    <update id="createTable">
         CREATE TABLE ${tableName}
         <foreach collection="columns" open="(" close=")" item="column" separator=",">
-            ${column.name} ${column.typeName}(#{column.length}) ${column.isNull} DEFAULT NULL
+            ${column.fieldName}
+            ${column.dataType}
+            (
+            <if test='column.dataType=="decimal"'>10,2</if>
+            <if test='column.dataType!="decimal"'>${column.length}</if>
+            )
+            ${column.isNull} DEFAULT NULL
         </foreach>
         ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
     </update>
     <select id="getFieldType" resultType="java.util.HashMap">
 
+    </select>
+    <insert id="addSysTableField" parameterType="java.util.List">
+        insert into systablefield (id,name,dataType,sort,length,tableId,remark,createDateTime,fieldName)
+        values
+        <foreach collection="fieldList" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.name},
+            #{item.dataType},
+            #{item.sort},
+            #{item.length},
+            #{item.tableId},
+            #{item.remark},
+            #{item.createDateTime},
+            #{item.fieldName}
+            )
+        </foreach>
+    </insert>
+    <insert id="addTableRecorder" parameterType="java.util.List">
+        insert into systable(id,name,tableName,remark,createDateTime)
+        values
+        <foreach collection="sysTableList" open="(" close=")" item="item" separator=",">
+            #{item.id},
+            #{item.name},
+            #{item.tableName},
+            #{item.remark},
+            #{item.createDateTime}
+        </foreach>
+    </insert>
+    <select id="queryHasTableByTableName" parameterType="java.lang.String" resultType="java.util.HashMap">
+          select t.table_name from information_schema.TABLES t where t.TABLE_SCHEMA ='chongzhen' and t.TABLE_NAME =#{tableName};
+    </select>
+    <delete id="deleteFieldsIfExist" parameterType="java.lang.Long">
+        delete from systablefield where tableId=#{tableId}
+    </delete>
+    <select id="queryHasTableInForm" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select * from systable where tableName=#{tableName}
     </select>
 </mapper>

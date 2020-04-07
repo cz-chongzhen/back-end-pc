@@ -26,4 +26,10 @@ public class AppResponse {
         this.statusCode = statusCode;
         this.message = message;
     }
+
+
+    public AppResponse(int statusCode,String message){
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 }

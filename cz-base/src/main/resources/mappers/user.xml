@@ -8,7 +8,7 @@
         select
         *
         from
-        user
+        sysuser
         <where>
             <if test="userName!=null and userName.trim()!=''">
                 userName=#{userName}
@@ -19,7 +19,13 @@
         </where>
     </select>
     <insert id="registerUser" parameterType="cn.cz.czbase.entity.User">
-        insert into user(id,userName,passWord,createDateTime,mobile,remark,creator)
+        insert into sysuser(id,userName,passWord,createDateTime,mobile,remark,creator)
         values(#{id},#{userName},#{passWord},#{createDateTime},#{mobile},#{remark},#{creator})
     </insert>
+    <update id="update" parameterType="cn.cz.czbase.entity.User">
+        update sysuser set userName=#{userName} where id='10001'
+    </update>
+    <update id="update2" parameterType="cn.cz.czbase.entity.User">
+        update sysuser set userName=#{userName} where id='10472'
+    </update>
 </mapper>

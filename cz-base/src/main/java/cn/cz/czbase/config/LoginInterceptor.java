@@ -1,14 +1,15 @@
-package cn.cz.czauth.config;
+package cn.cz.czbase.config;
 
-import cn.cz.czauth.dto.UserSession;
-import cn.cz.czauth.entity.User;
-import cn.cz.czauth.client.CzBaseService;
-import cn.cz.czauth.util.JwtUtil;
+import cn.cz.czbase.dto.UserSession;
+import cn.cz.czbase.entity.User;
+import cn.cz.czbase.service.UserService;
+import cn.cz.czbase.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -16,9 +17,10 @@ import java.lang.reflect.Method;
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
-    private CzBaseService czBaseService;
+    private UserService userService;
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         // 从 http 请求头中取出 token
         String token = request.getHeader("access_token");
         //如果不是映射到方法直接通过
@@ -34,6 +36,10 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
+        //用户登录  并且请求接口无token报错
+        if(token==null){
+            throw new RuntimeException("无token，请重新登录");
+        }
         //有token的话往UserSession中写入userId  和userName
         if(token!=null && token.trim().length()>0){
             try{
@@ -44,10 +50,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 throw new RuntimeException("解析JWT异常！");
             }
         }
-        if(token==null){
-            throw new RuntimeException("无token");
-        }
-        //检查有没有需要用户权限的注解
+        //检查有没有需要用户权限的注解  这步验证需要与数据库对比
         if (method.isAnnotationPresent(CheckToken.class)) {
             CheckToken checkToken = method.getAnnotation(CheckToken.class);
             if (checkToken.required()) {
@@ -65,7 +68,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 }
                 User paramUser = new User();
                 paramUser.setId(userId);
-                User user = czBaseService.findUser(paramUser);
+                User user = userService.findUser(paramUser);
                 if (user == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }

@@ -8,5 +8,9 @@ public interface UserDAO {
     User findUser(User user);
 
     int registerUser(User user);
+
+    void update(User user);
+
+    void update2(User user);
 }
 

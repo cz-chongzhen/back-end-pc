@@ -1,12 +1,11 @@
 package cn.cz.czbase.service;
 
-import cn.cz.czbase.entity.AppResponse;
-import cn.cz.czbase.entity.Column;
+import cn.cz.czbase.controller.CreateTableController;
+import cn.cz.czbase.entity.*;
 
 import java.util.List;
 
 public interface CreateTableService {
-    public AppResponse createTable(String name, List<Column> columnList);
 
-    AppResponse getFieldType();
+    AppResponse createTable(CreateTableController.TableEntity tableEntity);
 }

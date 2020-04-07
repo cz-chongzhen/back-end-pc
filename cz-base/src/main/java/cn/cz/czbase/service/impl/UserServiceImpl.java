@@ -1,6 +1,8 @@
 package cn.cz.czbase.service.impl;
 
 import cn.cz.czbase.dao.UserDAO;
+import cn.cz.czbase.entity.SysTable;
+import cn.cz.czbase.entity.SysTableField;
 import cn.cz.czbase.entity.User;
 import cn.cz.czbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +22,9 @@ public class UserServiceImpl implements UserService {
         userDAO.registerUser(user);
         return user;
     }
+
+
+
+
+
 }

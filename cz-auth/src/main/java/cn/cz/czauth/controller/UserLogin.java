@@ -1,10 +1,9 @@
 package cn.cz.czauth.controller;
 
-import cn.cz.czauth.config.LoginToken;
+import cn.cz.czauth.config.NoTokenVerify;
 import cn.cz.czauth.entity.AppResponse;
 import cn.cz.czauth.entity.User;
-import cn.cz.czauth.service.JWTVertiftService;
-import cn.cz.czauth.service.UserLoginService;
+import cn.cz.czauth.client.CzBaseService;
 import cn.cz.czauth.service.UserService;
 import cn.cz.czauth.util.JwtUtil;
 import org.joda.time.DateTime;
@@ -17,13 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/account")
+@RequestMapping(value = "/auth-service/account")
 public class UserLogin {
 
     @Autowired
-    private UserLoginService userLoginService;
-    @Autowired
-    private JWTVertiftService jwtVertiftService;
+    private CzBaseService czBaseService;
     @Autowired
     private UserService userService;
     /**
@@ -32,13 +29,13 @@ public class UserLogin {
      * @return
      */
     @RequestMapping(value = "/login")
-    @LoginToken
+    @NoTokenVerify
     public AppResponse userLogin(@RequestBody User loginUser){
         AppResponse appResponse = new AppResponse();
         User checkUser = new User();
         Map map = new HashMap();
         //通过用户名查找用户信息
-        checkUser = userLoginService.findUser(loginUser);
+        checkUser = czBaseService.findUser(loginUser);
         if(checkUser!=null){
             if(checkUser.getPassWord().equals(loginUser.getPassWord())){
                 appResponse.setAppData(checkUser);
@@ -64,7 +61,7 @@ public class UserLogin {
     }
 
     @RequestMapping(value = "/register")
-    @LoginToken
+    @NoTokenVerify
     public AppResponse registerUser(@RequestBody User user){
         return userService.registerUser(user);
     }
