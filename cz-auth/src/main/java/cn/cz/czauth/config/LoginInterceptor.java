@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
-@Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private CzBaseService czBaseService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 从 http 请求头中取出 token
