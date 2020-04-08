@@ -40,5 +40,10 @@ public class CreateTableController {
         private List<SysTableField> sysTableFieldList;
     }
 
+    @RequestMapping(value = "/updateTable",method = RequestMethod.POST)
+    public AppResponse updateTable(@RequestBody TableEntity tableEntity){
+        return createTableService.updateTable(tableEntity);
+    }
+
 
 }

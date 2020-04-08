@@ -8,4 +8,6 @@ import java.util.List;
 public interface CreateTableService {
 
     AppResponse createTable(CreateTableController.TableEntity tableEntity);
+
+    AppResponse updateTable(CreateTableController.TableEntity tableEntity);
 }

@@ -11,7 +11,7 @@
             <if test='column.dataType=="decimal"'>10,2</if>
             <if test='column.dataType!="decimal"'>${column.length}</if>
             )
-            ${column.isNull} DEFAULT NULL
+            ${column.isNull} DEFAULT NULL COMMENT ${column.remark}
         </foreach>
         ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
     </update>
@@ -55,4 +55,39 @@
     <select id="queryHasTableInForm" parameterType="java.lang.String" resultType="java.util.HashMap">
         select * from systable where tableName=#{tableName}
     </select>
+    <select id="queryFieldByTable" parameterType="cn.cz.czbase.entity.SysTable"
+            resultType="cn.cz.czbase.entity.SysTableField">
+        select
+        fieldName
+        from
+        systablefield
+        <where>
+            <if test="tableId!=0">tableId=#{tableId}</if>
+        </where>
+    </select>
+
+    <update id="updateField">
+        <foreach collection="updateFieldList" item="item">
+            ALTER TABLE ${tableName} MODIFY ${item.fieldName} ${item.dataType}(
+            <if test='column.dataType=="decimal"'>10,2</if>
+            <if test='column.dataType!="decimal"'>${item.length}</if>
+            ) DEFAULT NULL COMMENT ${remark};
+        </foreach>
+    </update>
+    <update id="addField">
+        <foreach collection="addFieldList" item="item">
+            ALTER TABLE ${tableName} ADD ${item.fieldName} ${item.dataType}(
+            <if test='item.dataType=="decimal"'>10,2</if>
+            <if test='item.dataType!="decimal"'>${item.length}</if>
+            ) DEFAULT NULL COMMENT ${item.remark};
+        </foreach>
+    </update>
+
+    <update id="updateTableRecorder" parameterType="cn.cz.czbase.entity.SysTable">
+        update systable
+        set
+        name=#{name}
+        remark=#{remark}
+        where id=#{id}
+    </update>
 </mapper>

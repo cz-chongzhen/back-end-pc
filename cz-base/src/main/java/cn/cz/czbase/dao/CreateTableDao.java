@@ -23,4 +23,12 @@ public interface CreateTableDao {
     void deleteFieldsIfExist(@Param("tableId") long tableId);
 
     List queryHasTableInForm(String tableName);
+
+    List<SysTableField> queryFieldByTable(SysTable sysTable);
+
+    void updateField(@Param("updateFieldList") List<SysTableField> updateFieldList, @Param("tableName") String tableName);
+
+    void addField(@Param("addFieldList") List<SysTableField> addFieldList, String tableName);
+
+    void updateTableRecorder(SysTable sysTable);
 }
