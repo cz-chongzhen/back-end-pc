@@ -1,15 +1,11 @@
 package cn.cz.czbase.controller;
 
-import cn.cz.czbase.config.CheckToken;
 import cn.cz.czbase.entity.AppResponse;
 import cn.cz.czbase.entity.SysTable;
 import cn.cz.czbase.entity.SysTableField;
 import cn.cz.czbase.service.CreateTableService;
-import cn.cz.czbase.util.JedisUtil;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

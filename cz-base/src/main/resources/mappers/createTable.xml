@@ -11,7 +11,7 @@
             <if test='column.dataType=="decimal"'>10,2</if>
             <if test='column.dataType!="decimal"'>${column.length}</if>
             )
-            ${column.isNull} DEFAULT NULL COMMENT ${column.remark}
+            ${column.isNull} DEFAULT NULL <if test="column.remark!=null">COMMENT #{column.remark}</if>
         </foreach>
         ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
     </update>
@@ -67,19 +67,19 @@
     </select>
 
     <update id="updateField">
-        <foreach collection="updateFieldList" item="item">
+        <foreach collection="updateFieldList" item="item" separator=";">
             ALTER TABLE ${tableName} MODIFY ${item.fieldName} ${item.dataType}(
-            <if test='column.dataType=="decimal"'>10,2</if>
-            <if test='column.dataType!="decimal"'>${item.length}</if>
-            ) DEFAULT NULL COMMENT ${remark};
+            <if test='item.dataType=="decimal"'>10,2</if>
+            <if test='item.dataType!="decimal"'>${item.length}</if>
+            ) DEFAULT NULL <if test="item.remark!=null">COMMENT #{item.remark}</if>
         </foreach>
     </update>
     <update id="addField">
-        <foreach collection="addFieldList" item="item">
+        <foreach collection="addFieldList" item="item" separator=";">
             ALTER TABLE ${tableName} ADD ${item.fieldName} ${item.dataType}(
             <if test='item.dataType=="decimal"'>10,2</if>
             <if test='item.dataType!="decimal"'>${item.length}</if>
-            ) DEFAULT NULL COMMENT ${item.remark};
+            ) DEFAULT NULL <if test="item.remark!=null">COMMENT #{item.remark}</if>
         </foreach>
     </update>
 
@@ -87,7 +87,7 @@
         update systable
         set
         name=#{name}
-        remark=#{remark}
+        <if test="#{remark}!=null">,remark=#{remark}</if>
         where id=#{id}
     </update>
 </mapper>
