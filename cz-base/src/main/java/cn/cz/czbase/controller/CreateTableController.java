@@ -6,10 +6,7 @@ import cn.cz.czbase.entity.SysTableField;
 import cn.cz.czbase.service.CreateTableService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ public class CreateTableController {
     private CreateTableService createTableService;
 
     /**
-     * 在数据库中创建表
+     * 在数据库中创建表  以及 修改表
      * @param tableEntity
      * @return
      */
@@ -30,16 +27,19 @@ public class CreateTableController {
         return createTableService.createTable(tableEntity);
     }
 
+    @RequestMapping(value = "/queryTables",method = RequestMethod.GET)
+    public AppResponse getTables(){
+        return createTableService.getTables();
+    }
+
+    @RequestMapping(value = "/queryTableField/{tableId}",method = RequestMethod.GET)
+    public AppResponse getTableField(@PathVariable("tableId") Long tableId){
+        return createTableService.getTableField(tableId);
+    }
+
     @Data
     public static class TableEntity {
         private SysTable sysTable;
         private List<SysTableField> sysTableFieldList;
     }
-
-    @RequestMapping(value = "/updateTable",method = RequestMethod.POST)
-    public AppResponse updateTable(@RequestBody TableEntity tableEntity){
-        return createTableService.updateTable(tableEntity);
-    }
-
-
 }

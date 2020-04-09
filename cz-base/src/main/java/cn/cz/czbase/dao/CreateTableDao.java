@@ -24,11 +24,13 @@ public interface CreateTableDao {
 
     List queryHasTableInForm(String tableName);
 
-    List<SysTableField> queryFieldByTable(SysTable sysTable);
+    List<SysTableField> queryFieldByTable(SysTableField sysTableField);
 
     void updateField(@Param("updateFieldList") List<SysTableField> updateFieldList, @Param("tableName") String tableName);
 
     void addField(@Param("addFieldList") List<SysTableField> addFieldList, String tableName);
 
     void updateTableRecorder(SysTable sysTable);
+
+    List<SysTable> getTables();
 }

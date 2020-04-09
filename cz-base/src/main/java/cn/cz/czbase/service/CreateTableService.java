@@ -10,4 +10,8 @@ public interface CreateTableService {
     AppResponse createTable(CreateTableController.TableEntity tableEntity);
 
     AppResponse updateTable(CreateTableController.TableEntity tableEntity);
+
+    AppResponse getTableField(Long tableId);
+
+    AppResponse getTables();
 }

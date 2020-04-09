@@ -55,15 +55,21 @@
     <select id="queryHasTableInForm" parameterType="java.lang.String" resultType="java.util.HashMap">
         select * from systable where tableName=#{tableName}
     </select>
-    <select id="queryFieldByTable" parameterType="cn.cz.czbase.entity.SysTable"
+    <select id="queryFieldByTable" parameterType="cn.cz.czbase.entity.SysTableField"
             resultType="cn.cz.czbase.entity.SysTableField">
         select
-        fieldName
+        *
         from
         systablefield
         <where>
             <if test="tableId!=0">tableId=#{tableId}</if>
         </where>
+    </select>
+    <select id="getTables" resultType="cn.cz.czbase.entity.SysTable">
+        select
+        *
+        from
+        systable
     </select>
 
     <update id="updateField">

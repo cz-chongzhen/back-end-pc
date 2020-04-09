@@ -63,7 +63,7 @@ public class CreateTableServiceImpl implements CreateTableService {
         List<SysTableField> updateFieldList = new ArrayList<>();
         for(SysTableField newField:newFieldList){
             boolean isAdd = true;
-            if(newField.getTableId()!=0)
+            if(newField.getTableId()!=0 && newField.getId()!=0)
                 isAdd = false;
             if(isAdd) {
                 addFieldList.add(newField);
@@ -85,6 +85,20 @@ public class CreateTableServiceImpl implements CreateTableService {
             createTableDao.addField(addFieldList,sysTable.getTableName());
 
         return null;
+    }
+
+    @Override
+    public AppResponse getTables() {
+        List<SysTable> tableList = createTableDao.getTables();
+        return new AppResponse(tableList,200,"查询成功");
+    }
+
+    @Override
+    public AppResponse getTableField(Long tableId) {
+        SysTableField sysTableField = new SysTableField();
+        sysTableField.setId(tableId);
+        List<SysTableField> fieldList = createTableDao.queryFieldByTable(sysTableField);
+        return new AppResponse(fieldList,200,"查询成功");
     }
 
     private void updateTableRecorder(SysTable sysTable) {
