@@ -17,24 +17,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
         return new LoginInterceptor();
     }
 
-    /**
-     * 配置卡啊与解决方案
-     * @return
-     */
-    @Bean
-    public WebMvcConfigurer corsConfigurer(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("PUT", "GET","POST","DELETE","PATCH")
-                        .allowedHeaders("*")
-                        .exposedHeaders("header1", "header2")
-                        .allowCredentials(true);
-            }
-        };
-    }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

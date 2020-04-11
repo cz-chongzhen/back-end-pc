@@ -38,9 +38,6 @@ public class RedisConfig {
     @Autowired
     private JedisPoolConfig jedisPoolConfig;
 
-    @Autowired
-    private JedisPool jedisPool;
-
 
     @Bean
     public JedisPoolConfig getJedisPoolConfig(){
@@ -61,9 +58,7 @@ public class RedisConfig {
 
     @Bean
     public JedisUtil getJedisUtil(){
-        JedisUtil jedisUtil = new JedisUtil();
-        jedisUtil.setJedisPool(jedisPool);
-        return jedisUtil;
+        return new JedisUtil();
     }
 
 }

@@ -1,17 +1,19 @@
 package cn.cz.czbase.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.util.SafeEncoder;
 
 public class JedisUtil {
 
+    @Autowired
     private JedisPool jedisPool;
 
-    public void setJedisPool(JedisPool jedisPool) {
-        this.jedisPool = jedisPool;
-    }
-
+    /**
+     * 从连接池中获取jedis连接
+     * @return
+     */
     public Jedis getResource(){
         return jedisPool.getResource();
     }
@@ -19,7 +21,7 @@ public class JedisUtil {
 
 
     /**
-     * 领用redis  incr属性实现自增id
+     * redis  incr属性实现自增id
      * @return   返回自增后id的值
      */
     public long generateId(){

@@ -22,16 +22,13 @@ public class CreateTableServiceImpl implements CreateTableService {
     private JedisUtil jedisUtil;
 
 
-
     @Override
     public AppResponse createTable(CreateTableController.TableEntity tableEntity) {
         SysTable sysTable = tableEntity.getSysTable();
         boolean hasTableInSystem = hasTableByTableName(sysTable.getTableName());
         //查询数据库中是否有此表 若有则是修改
-        if(hasTableInSystem){
-            updateTable(tableEntity);
-            return new AppResponse(sysTable,200,"修改成功");
-        }
+        if(hasTableInSystem)
+            return updateTable(tableEntity);
 
         //查看systable中是否已经存在此表的记录  有记录代表此表之前创建失败  所以 表记录 和字段表中都有记录
         boolean hasTableInTable = hasTableInTableForm(sysTable.getTableName());
@@ -84,7 +81,7 @@ public class CreateTableServiceImpl implements CreateTableService {
         if(addFieldList!=null && addFieldList.size()>0)
             createTableDao.addField(addFieldList,sysTable.getTableName());
 
-        return null;
+        return new AppResponse(sysTable,200,"修改成功");
     }
 
     @Override

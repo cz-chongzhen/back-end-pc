@@ -6,6 +6,7 @@ import cn.cz.czauth.client.CzBaseService;
 import cn.cz.czauth.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -27,6 +28,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
+        System.out.println("---"+method.getExceptionTypes()+"*******");
         //检查是否有LoginToken注释，有则跳过认证
         if(method.isAnnotationPresent(NoTokenVerify.class)){
             NoTokenVerify loginToken = method.getAnnotation(NoTokenVerify.class);
@@ -44,9 +46,9 @@ public class LoginInterceptor implements HandlerInterceptor {
                 throw new RuntimeException("解析JWT异常！");
             }
         }
-        if(token==null){
-            throw new RuntimeException("无token");
-        }
+//        if(token==null){
+//            throw new RuntimeException("无token");
+//        }
         //检查有没有需要用户权限的注解
         if (method.isAnnotationPresent(CheckToken.class)) {
             CheckToken checkToken = method.getAnnotation(CheckToken.class);
