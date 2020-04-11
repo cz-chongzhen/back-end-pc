@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 public class LoginInterceptor implements HandlerInterceptor {
-    @Autowired
-    private CzBaseService czBaseService;
+//    @Autowired
+//    private CzBaseService czBaseService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -67,14 +67,14 @@ public class LoginInterceptor implements HandlerInterceptor {
                 }
                 User paramUser = new User();
                 paramUser.setId(userId);
-                User user = czBaseService.findUser(paramUser);
-                if (user == null) {
-                    throw new RuntimeException("用户不存在，请重新登录");
-                }
-                Boolean verify = JwtUtil.isVerify(token, user);
-                if (!verify) {
-                    throw new RuntimeException("非法访问！");
-                }
+//                User user = czBaseService.findUser(paramUser);
+//                if (user == null) {
+//                    throw new RuntimeException("用户不存在，请重新登录");
+//                }
+//                Boolean verify = JwtUtil.isVerify(token, user);
+//                if (!verify) {
+//                    throw new RuntimeException("非法访问！");
+//                }
                 return true;
             }
         }
