@@ -16,4 +16,7 @@ public interface CreateTableService {
     AppResponse getTables();
 
     AppResponse queryCommobox();
+
+
+    AppResponse addRecorder(CreateTableController.TableEntity tableEntity);
 }

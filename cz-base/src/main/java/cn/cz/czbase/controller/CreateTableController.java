@@ -30,6 +30,8 @@ public class CreateTableController {
         return createTableService.createTable(tableEntity);
     }
 
+
+
     /**
      * 查询表
      * @return

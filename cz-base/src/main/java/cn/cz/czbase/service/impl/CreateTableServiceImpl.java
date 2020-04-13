@@ -26,6 +26,11 @@ public class CreateTableServiceImpl implements CreateTableService {
     public AppResponse createTable(CreateTableController.TableEntity tableEntity) {
         SysTable sysTable = tableEntity.getSysTable();
         boolean hasTableInSystem = hasTableByTableName(sysTable.getTableName());
+        List<SysTableField> sysTableFieldList = tableEntity.getSysTableFieldList();
+        if(sysTableFieldList==null || sysTableFieldList.size()==0){
+            SysTable table = addTableRecorder(sysTable);
+            return new AppResponse(table,200,"创建成功");
+        }
         //查询数据库中是否有此表 若有则是修改
         if(hasTableInSystem)
             return updateTable(tableEntity);
@@ -34,7 +39,7 @@ public class CreateTableServiceImpl implements CreateTableService {
         boolean hasTableInTable = hasTableInTableForm(sysTable.getTableName());
         if(!hasTableInTable)
             sysTable = addTableRecorder(sysTable);
-        List<SysTableField> sysTableFieldList = tableEntity.getSysTableFieldList();
+
         if(sysTableFieldList!=null && sysTableFieldList.size()>0){
             for(SysTableField field:sysTableFieldList){
                 field.setId(jedisUtil.generateId());
@@ -82,6 +87,12 @@ public class CreateTableServiceImpl implements CreateTableService {
             createTableDao.addField(addFieldList,sysTable.getTableName());
 
         return new AppResponse(sysTable,200,"修改成功");
+    }
+
+    @Override
+    public AppResponse addRecorder(CreateTableController.TableEntity tableEntity) {
+        SysTable sysTable = this.addTableRecorder(tableEntity.getSysTable());
+        return new AppResponse(sysTable,200,"创建成功");
     }
 
     @Override
