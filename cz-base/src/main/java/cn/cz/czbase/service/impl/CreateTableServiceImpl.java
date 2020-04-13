@@ -85,6 +85,12 @@ public class CreateTableServiceImpl implements CreateTableService {
     }
 
     @Override
+    public AppResponse queryCommobox() {
+        List list = createTableDao.queryCommobox();
+        return new AppResponse(list,200,"查询成功");
+    }
+
+    @Override
     public AppResponse getTables() {
         List<SysTable> tableList = createTableDao.getTables();
         return new AppResponse(tableList,200,"查询成功");

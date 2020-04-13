@@ -14,4 +14,6 @@ public interface CreateTableService {
     AppResponse getTableField(Long tableId);
 
     AppResponse getTables();
+
+    AppResponse queryCommobox();
 }

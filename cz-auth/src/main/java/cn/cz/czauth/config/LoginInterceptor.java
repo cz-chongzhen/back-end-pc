@@ -28,7 +28,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-        System.out.println("---"+method.getExceptionTypes()+"*******");
         //检查是否有LoginToken注释，有则跳过认证
         if(method.isAnnotationPresent(NoTokenVerify.class)){
             NoTokenVerify loginToken = method.getAnnotation(NoTokenVerify.class);

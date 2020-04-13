@@ -54,6 +54,11 @@ public class CreateTableController {
         return jedisUtil.generateId();
     }
 
+    @RequestMapping(value="/queryCommobox")
+    public AppResponse queryCommobox(){
+        return createTableService.queryCommobox();
+    }
+
     @Data
     public static class TableEntity {
         private SysTable sysTable;

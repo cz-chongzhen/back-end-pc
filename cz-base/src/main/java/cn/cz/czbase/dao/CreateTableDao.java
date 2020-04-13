@@ -33,4 +33,6 @@ public interface CreateTableDao {
     void updateTableRecorder(SysTable sysTable);
 
     List<SysTable> getTables();
+
+    List queryCommobox();
 }

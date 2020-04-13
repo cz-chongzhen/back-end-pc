@@ -96,4 +96,7 @@
         <if test="#{remark}!=null">,remark=#{remark}</if>
         where id=#{id}
     </update>
+    <select id="queryCommobox" resultType="java.util.Map">
+        select name as label,value from bdsubitem where sourceId=10001
+    </select>
 </mapper>
