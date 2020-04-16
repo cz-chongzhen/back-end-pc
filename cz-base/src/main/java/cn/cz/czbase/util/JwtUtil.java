@@ -51,8 +51,8 @@ public class JwtUtil {
                 //设置签名使用的签名算法和签名使用的秘钥
                 .signWith(signatureAlgorithm, key);
         if (ttlMillis >= 0) {
-            long expMillis = nowMillis + ttlMillis;
-            DateTime exp = new DateTime(expMillis);
+//            long expMillis = nowMillis + ttlMillis;
+            DateTime exp = new DateTime(ttlMillis);
             //设置过期时间
             builder.setExpiration(exp.toDate());
         }

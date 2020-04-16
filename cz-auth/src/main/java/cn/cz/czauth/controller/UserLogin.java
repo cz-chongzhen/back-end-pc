@@ -44,7 +44,7 @@ public class UserLogin {
                 appResponse.setAppData(checkUser);
                 DateTime dateTime = new DateTime();
                 //设置token有效时间为60分钟
-                dateTime = dateTime.plusMinutes(60);
+//                dateTime = dateTime.plusMinutes(1);
                 long expirems = dateTime.plusMinutes(60).getMillis();
                 String access_token  = JwtUtil.createJWT(expirems,checkUser);
                 map.put("user",checkUser);

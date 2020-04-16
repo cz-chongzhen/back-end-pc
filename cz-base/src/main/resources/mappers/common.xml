@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cz.czbase.dao.CommonDAO">
+    <!--通用查询方法-->
+    <select id="queryTableData" parameterType="cn.cz.czbase.entity.CommonEntity"
+            resultType="java.util.HashMap">
+        select
+        <if test="columns==null">
+            *
+        </if>
+        <if test="columns!=null and columns.size > 0">
+            <foreach collection="columns" separator="," item="column">
+                ${column}
+            </foreach>
+        </if>
+        from
+        ${tableName}
+
+        <where>
+            <if test="conditionColumnsByAnd!=null and conditionColumnsByAnd.size>0">
+                <foreach collection="conditionColumnsByAnd" item="conditionColumn" separator="and" index="i">
+                    <foreach collection="conditionColumn.keys" item="item" index="j">
+                        ${item} = #{conditionColumn.${item}}
+                    </foreach>
+                </foreach>
+            </if>
+
+            <if test="conditionColumnsByOr!=null and conditionColumnsByOr.size > 0">
+                OR
+            </if>
+            <if test="conditionColumnsByOr!=null and conditionColumnsByOr.size>0">
+                <foreach collection="conditionColumnsByOr" item="item" separator="OR">
+                    <foreach collection="item.keys" item="map">
+                        ${map} = #{item.${map}}
+                    </foreach>
+                </foreach>
+            </if>
+        </where>
+
+    </select>
+
+    <!--通用修改方法-->
+    <!--<update id="updateTableData" parameterType="cn.cz.czbase.entity.CommonEntity">-->
+        <!--update-->
+        <!--${tableName}-->
+        <!--set-->
+        <!--<if test="updateColumns!=null and updateColumns.size>0">-->
+            <!--<foreach collection="updateColumns" item="column" separator=",">-->
+                <!--<foreach collection="column.keys" item="columnName">-->
+                    <!--${columnName} = #{column.${columnName}}-->
+                <!--</foreach>-->
+            <!--</foreach>-->
+        <!--</if>-->
+        <!--<if test="updateCondition!=null and updateCondition.size>0">-->
+            <!--<where>-->
+                <!--<foreach collection="updateCondition" item="item" separator="AND">-->
+                    <!--<foreach collection="item.keys" item="map">-->
+                        <!--${map} = #{item.${map}}-->
+                    <!--</foreach>-->
+                <!--</foreach>-->
+            <!--</where>-->
+        <!--</if>-->
+    <!--</update>-->
+
+    <update id="updateTableData" parameterType="cn.cz.czbase.entity.CommonEntity">
+        insert into ${tableName}
+        <foreach collection="fieldList.keys" item="field" open="(" close=")" separator=",">
+            ${field}
+        </foreach>
+        values
+        <foreach collection="updateList" item="columns" separator=",">
+            <foreach collection="columns" item="column" separator="," open="(" close=")">
+                #{column}
+            </foreach>
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        <foreach collection="fieldList.keys" item="field" separator=",">
+            ${field} = values(${field})
+        </foreach>
+    </update>
+
+    <delete id="deleteTableData" parameterType="cn.cz.czbase.entity.CommonEntity">
+        delete
+        from
+        ${tableName}
+        <where>
+            id in
+
+            <foreach collection="deleteList" item="columns" separator="," open="(" close=")">
+              ${columns.id}
+            </foreach>
+
+        </where>
+    </delete>
+</mapper>

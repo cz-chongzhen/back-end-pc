@@ -12,7 +12,6 @@ public class WebMvcConfigerForCros {
      * @return
      */
     @Bean
-
     public WebMvcConfigurer corsConfigurer(){
         return new WebMvcConfigurer() {
             @Override

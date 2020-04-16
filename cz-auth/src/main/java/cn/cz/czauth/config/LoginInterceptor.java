@@ -1,23 +1,22 @@
 package cn.cz.czauth.config;
 
-import cn.cz.czauth.dto.UserSession;
-import cn.cz.czauth.entity.User;
 import cn.cz.czauth.client.CzBaseService;
+import cn.cz.czauth.dto.UserSession;
+import cn.cz.czauth.entity.AppResponse;
+import cn.cz.czauth.entity.User;
 import cn.cz.czauth.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
 public class LoginInterceptor implements HandlerInterceptor {
 //    @Autowired
 //    private CzBaseService czBaseService;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 从 http 请求头中取出 token
@@ -38,44 +37,29 @@ public class LoginInterceptor implements HandlerInterceptor {
         //有token的话往UserSession中写入userId  和userName
         if(token!=null && token.trim().length()>0){
             try{
+//                User user = new User();
+//                user.setUserName("admin");
+//                czBaseService.findUser(user);
                 Claims claims = JwtUtil.parseJWT(token);
                 UserSession.setProperty("userId",claims.get("id"));
                 UserSession.setProperty("userName",claims.get("userName"));
             }catch (Exception e){
-                throw new RuntimeException("解析JWT异常！");
+                response.setStatus(401);
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("application/json; charset=utf-8");
+                AppResponse res = new AppResponse();
+                res.setMessage("token验证失败");
+                res.setStatusCode(401);
+                PrintWriter out = null ;
+                out = response.getWriter();
+                out.write(res.toString());
+                out.flush();
+                out.close();
+                return false;
             }
         }
-//        if(token==null){
-//            throw new RuntimeException("无token");
-//        }
-        //检查有没有需要用户权限的注解
-        if (method.isAnnotationPresent(CheckToken.class)) {
-            CheckToken checkToken = method.getAnnotation(CheckToken.class);
-            if (checkToken.required()) {
-                // 执行认证
-                if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
-                }
-                // 获取 token 中的 user id
-                long userId;
-                try {
-                    Claims claims = JwtUtil.parseJWT(token);
-                    userId = (Long)claims.get("id");
-                } catch (Exception j) {
-                    throw new RuntimeException("解析JWT异常！");
-                }
-                User paramUser = new User();
-                paramUser.setId(userId);
-//                User user = czBaseService.findUser(paramUser);
-//                if (user == null) {
-//                    throw new RuntimeException("用户不存在，请重新登录");
-//                }
-//                Boolean verify = JwtUtil.isVerify(token, user);
-//                if (!verify) {
-//                    throw new RuntimeException("非法访问！");
-//                }
-                return true;
-            }
+        if(token==null){
+            throw new RuntimeException("无token");
         }
         return true;
     }

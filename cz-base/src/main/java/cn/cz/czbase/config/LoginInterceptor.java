@@ -1,23 +1,20 @@
 package cn.cz.czbase.config;
 
 import cn.cz.czbase.dto.UserSession;
-import cn.cz.czbase.entity.User;
-import cn.cz.czbase.service.UserService;
+import cn.cz.czbase.entity.AppResponse;
 import cn.cz.czbase.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
-    @Autowired
-    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
@@ -36,10 +33,6 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        //用户登录  并且请求接口无token报错
-        if(token==null){
-            throw new RuntimeException("无token，请重新登录");
-        }
         //有token的话往UserSession中写入userId  和userName
         if(token!=null && token.trim().length()>0){
             try{
@@ -47,37 +40,22 @@ public class LoginInterceptor implements HandlerInterceptor {
                 UserSession.setProperty("userId",claims.get("id"));
                 UserSession.setProperty("userName",claims.get("userName"));
             }catch (Exception e){
-                throw new RuntimeException("解析JWT异常！");
+                response.setStatus(401);
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("application/json; charset=utf-8");
+                AppResponse res = new AppResponse();
+                res.setMessage("token验证失败");
+                res.setStatusCode(401);
+                PrintWriter out = null ;
+                out = response.getWriter();
+                out.write(res.toString());
+                out.flush();
+                out.close();
+                return false;
             }
         }
-        //检查有没有需要用户权限的注解  这步验证需要与数据库对比
-        if (method.isAnnotationPresent(CheckToken.class)) {
-            CheckToken checkToken = method.getAnnotation(CheckToken.class);
-            if (checkToken.required()) {
-                // 执行认证
-                if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
-                }
-                // 获取 token 中的 user id
-                long userId;
-                try {
-                    Claims claims = JwtUtil.parseJWT(token);
-                    userId = (Long)claims.get("id");
-                } catch (Exception j) {
-                    throw new RuntimeException("解析JWT异常！");
-                }
-                User paramUser = new User();
-                paramUser.setId(userId);
-                User user = userService.findUser(paramUser);
-                if (user == null) {
-                    throw new RuntimeException("用户不存在，请重新登录");
-                }
-                Boolean verify = JwtUtil.isVerify(token, user);
-                if (!verify) {
-                    throw new RuntimeException("非法访问！");
-                }
-                return true;
-            }
+        if(token==null){
+            throw new RuntimeException("无token");
         }
         return true;
     }

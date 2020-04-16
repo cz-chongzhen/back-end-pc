@@ -40,14 +40,6 @@ public class RunLogicException extends RuntimeException{
 	}
 
 
-	public static void main(String[] args) {
-		if(1==1)
-			throw new RunLogicException(405,"出错误了");
-
-		System.out.println("222");
-
-	}
-
 
 	public static String ss(){
 		return "fg";
