@@ -8,6 +8,7 @@ import cn.cz.czbase.util.JedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ public class CommonServiceImpl implements CommonService {
     private CommonDAO commonDAO;
     @Autowired
     private JedisUtil jedisUtil;
+
     @Override
     public AppResponse queryTableData(CommonEntity commonEntity) {
         List<Map> tableData = commonDAO.queryTableData(commonEntity);
@@ -29,6 +31,11 @@ public class CommonServiceImpl implements CommonService {
     public AppResponse deleteData(CommonEntity commonEntity) {
         commonDAO.deleteTableData(commonEntity);
         return new AppResponse(null,200,"删除成功");
+    }
+
+    @Override
+    public AppResponse fileUpload(HttpServletRequest request) {
+        return null;
     }
 
     @Override

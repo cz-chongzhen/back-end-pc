@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/base-service/common")
 public class CommonController{
@@ -29,12 +31,12 @@ public class CommonController{
      * @param commonEntity
      * @return
      */
-    @RequestMapping("update")
+    @RequestMapping("/update")
     public AppResponse updateData(@RequestBody CommonEntity commonEntity){
         return commonService.updateTableData(commonEntity);
     }
 
-    @RequestMapping("delete")
+    @RequestMapping("/delete")
     public AppResponse deleteData(@RequestBody CommonEntity commonEntity){
         return commonService.deleteData(commonEntity);
     }
