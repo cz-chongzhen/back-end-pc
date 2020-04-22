@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/base-service/common")
-public class CommonController {
+public class CommonController{
     @Autowired
     private CommonService commonService;
 
@@ -38,5 +38,4 @@ public class CommonController {
     public AppResponse deleteData(@RequestBody CommonEntity commonEntity){
         return commonService.deleteData(commonEntity);
     }
-
 }

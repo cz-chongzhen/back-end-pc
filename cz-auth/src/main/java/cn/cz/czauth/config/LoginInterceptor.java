@@ -1,12 +1,9 @@
 package cn.cz.czauth.config;
 
-import cn.cz.czauth.client.CzBaseService;
 import cn.cz.czauth.dto.UserSession;
 import cn.cz.czauth.entity.AppResponse;
-import cn.cz.czauth.entity.User;
 import cn.cz.czauth.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +12,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 
 public class LoginInterceptor implements HandlerInterceptor {
-//    @Autowired
-//    private CzBaseService czBaseService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 从 http 请求头中取出 token
@@ -37,9 +32,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         //有token的话往UserSession中写入userId  和userName
         if(token!=null && token.trim().length()>0){
             try{
-//                User user = new User();
-//                user.setUserName("admin");
-//                czBaseService.findUser(user);
                 Claims claims = JwtUtil.parseJWT(token);
                 UserSession.setProperty("userId",claims.get("id"));
                 UserSession.setProperty("userName",claims.get("userName"));
